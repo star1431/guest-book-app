@@ -1,0 +1,22 @@
+/* 기본 리셋 */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-size: 1.4rem;
+}
+
+button,
+a[href] {
+    cursor: pointer;
+}
