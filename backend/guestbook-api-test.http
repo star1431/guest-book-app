@@ -1,0 +1,46 @@
+###HTTP 테스트 파일 (서버on 상태에서 확인)
+
+@baseUrl = http://localhost:8080
+
+### 1. 방명록 전체 조회
+GET {{baseUrl}}/api/guestbooks
+Content-Type: application/json
+
+### 2. 방명록 등록
+POST {{baseUrl}}/api/guestbooks
+Content-Type: application/json
+
+{
+  "nickName": "정병천",
+  "password": "1234",
+  "content": "첫 번째 방명록입니다!"
+}
+
+### 3. 방명록 등록 (계속)
+POST {{baseUrl}}/api/guestbooks
+Content-Type: application/json
+
+{
+  "nickName": "익명C",
+  "password": "1234",
+  "content": "추가 방명록 작성 test"
+}
+
+### 4. 방명록 수정
+PUT {{baseUrl}}/api/guestbooks/1
+Content-Type: application/json
+
+{
+  "nickName": "정병천-A",
+  "password": "1234",
+  "content": "방명록 내용을 수정"
+}
+
+### 5. 방명록 삭제
+DELETE {{baseUrl}}/api/guestbooks/6
+Content-Type: application/json
+
+{
+  "password": "1234"
+}
+
