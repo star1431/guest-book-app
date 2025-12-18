@@ -13,24 +13,37 @@
 
 ## 1일차 체크리스트
 
-- [ ] GitHub 리포지토리 생성 및 코드 Push
+- [✅] GitHub 리포지토리 생성 및 코드 Push
 - [✅] Backend/Frontend 폴더 분리
 - [✅] 로컬에서 데이터 저장/조회 성공 스크린샷
 - [✅] API 명세서 작성 (docs/02-api-spec.md)
 
 ![image.png](./image.png)
 
-- 작업 중 보완점 
-    - 백엔드 작업시 api 삭제요청시 쿼리파라매터값으로 password를 받을려고 했었는데
-    - url에 노출되는거 인지하여, 삭제도 그냥 리퀘스트dto로 받게끔 수정 
+### 작업 history
 
+1. **Rest API 구현할 때 delete 요청 고민**
+    - 백엔드 작업 중 메서드 delete 요청시 쿼리파라매터값으로 password를 받을려고 했었는데
+    - url에 노출되는거 인지하여, 삭제도 그냥 리퀘스트dto로 받게끔 수정
+
+2. **github 게시 문제**
+    - 최초 게시하기전 루트 디렉토리에 .gitignore 파일 미리 작성 후
+    - 게시하였으나, frontend 폴더만 게시가 되지 않아 문제를 겪음
+    - 원인확인해보니 frontend 내 별도로 .git 폴더가 생성되어 있어서
+    - 리포지토리가 분리되어 있었음
+    - frontend 폴더 내 .git 폴더 삭제 후 다시 게시하여 해결
+
+
+---
 
 ## 2일차 체크리스트
-- [ ] Dockerfile 2개 작성 (Backend, Frontend)
-- [ ] docker-compose.yml 작성
-- [ ] 로컬에서 docker-compose up 실행 확인
-- [ ] AWS EC2에 수동 배포 성공
-- [ ] EC2 IP 주소로 서비스 접속 확인
+- [✅] Dockerfile 2개 작성 (Backend, Frontend)
+- [✅] docker-compose.yml 작성
+- [✅] 로컬에서 docker-compose up 실행 확인
+- [✅] AWS EC2에 수동 배포 성공
+- [✅] EC2 IP 주소로 서비스 접속 확인
+
+---
 
 
 ## 3일차 체크리스트

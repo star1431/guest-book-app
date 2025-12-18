@@ -51,3 +51,12 @@ yarn-error.log*
 backend/src/main/resources/application.yml
 backend/src/main/resources/mysql/local_test_docker_db
 
+
+# ec2 키
+*.pem
+
+# ec2 폴더
+ec2/*.tar
+ec2/*.env
+ec2/README_ori.md
+

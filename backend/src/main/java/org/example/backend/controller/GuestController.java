@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/guestbooks")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000") // frontend CORS 설정
+@CrossOrigin(origins = "${cors.allowed-origins:http://localhost:3000}") // 기본은 로컬, 배포 시 환경변수로 변경
 public class GuestController {
     private final GuestBookService guestBookService;
 

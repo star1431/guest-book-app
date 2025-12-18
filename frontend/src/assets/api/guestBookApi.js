@@ -1,4 +1,6 @@
-const API_URL = 'http://localhost:8080/api/guestbooks';
+// next.config.mjs 에서 설정한 주소 사용
+// const API_URL = 'http://localhost:8080/api/guestbooks';
+const API_URL = '/api/guestbooks';
 
 /**
  * 방명록 전체 조회
@@ -8,6 +10,7 @@ const API_URL = 'http://localhost:8080/api/guestbooks';
  * const guestbooks = await getGuestBooks();
  */
 export const getGuestBooks = async () => {
+    // console.log(API_URL);
     const response = await fetch(API_URL, {
         method: 'GET',
         cache: 'no-store',
