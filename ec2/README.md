@@ -39,6 +39,7 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: Asia/Seoul                                      # 시간대 설정         
     ports:
       - "3306:3306"
     volumes:
@@ -67,6 +68,7 @@ services:
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
       CORS_ALLOWED_ORIGINS: ${CORS_URL}                   # 프론트 주소 CORS
+      TZ: Asia/Seoul                                      # 시간대 설정         
       JAVA_OPTS: "-Xmx280m -Xms180m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
       # JVM 최적화 (힙 300m, G1GC 사용, GC 일시정지 시간 제한)
 
