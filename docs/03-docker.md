@@ -99,7 +99,7 @@ CMD ["node", "server.js"]
 ## 4. docker-compose 역할
 
 ```yaml
-version: '3.8'
+# version: '3.8'
 services:
   mysql: # mysql 컨테이너 설정
     image: mysql:8.0    # mysql 8.0 이미지 사용

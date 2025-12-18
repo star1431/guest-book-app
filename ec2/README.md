@@ -31,7 +31,6 @@ CORS_URL=http://<퍼블릭IPv4주소>:3000
 - 해당 ec2/docker-compose.yml (빌드 -> 이미지로 교체함)
 
 ```yaml
-version: '3.8'
 services:
   mysql:
     image: mysql:8.0
@@ -44,27 +43,41 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    mem_limit: 400m
+    # MySQL 최적화 옵션 (t3.micro 메모리절약)
+    # 성능 스키마 비활성화
+    # 버퍼 풀 크기 조정
+    # 최대 연결 수 조정 (151 -> 50)
+    command: >
+      --performance-schema=OFF
+      --innodb-buffer-pool-size=100M
+      --max-connections=5
+    # restart: unless-stopped
 
   backend:
-    image: star1431/guest-book-app-backend:latest
+    image: star1431/guest-book-app-backend:latest         # 빌드x 이미지로 교체
     ports:
       - "8080:8080"
     depends_on:
       - mysql
-    restart: always                                       # 컨테이너 재시작 설정
+    # restart: unless-stopped                                       # 컨테이너 재시작 설정
+    mem_limit: 350m
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
       CORS_ALLOWED_ORIGINS: ${CORS_URL}                   # 프론트 주소 CORS
+      JAVA_OPTS: "-Xmx280m -Xms180m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
+      # JVM 최적화 (힙 300m, G1GC 사용, GC 일시정지 시간 제한)
 
   frontend:
-    image: star1431/guest-book-app-frontend:latest
+    image: star1431/guest-book-app-frontend:latest        # 빌드x 이미지로 교체
     ports:
       - "3000:3000"
     depends_on:
       - backend
-
+    mem_limit: 100m
+    # restart: unless-stopped
 
 volumes:
   mysql_data:
@@ -140,3 +153,17 @@ http://<퍼블릭IPv4주소>:8080/api/guestbooks
 # 프론트엔드
 http://<퍼블릭IPv4주소>:3000
 ```
+
+![image-1.png](image-1.png)
+
+---
+
+## 4. EC2 도커 상태 및 메모리 상태 확인
+
+```bash
+docker-compose ps
+docker stats --no-stream
+free -h
+```
+
+![image.png](./image.png)
