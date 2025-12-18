@@ -51,8 +51,8 @@ services:
     # 최대 연결 수 조정 (151 -> 50)
     command: >
       --performance-schema=OFF
-      --innodb-buffer-pool-size=100M
-      --max-connections=5
+      --innodb-buffer-pool-size=128M
+      --max-connections=50
     # restart: unless-stopped
 
   backend:
@@ -70,7 +70,7 @@ services:
       CORS_ALLOWED_ORIGINS: ${CORS_URL}                   # 프론트 주소 CORS
       TZ: Asia/Seoul                                      # 시간대 설정         
       JAVA_OPTS: "-Xmx280m -Xms180m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
-      # JVM 최적화 (힙 300m, G1GC 사용, GC 일시정지 시간 제한)
+      # JVM 최적화 (힙 280~180, G1 GC 사용, GC 일시정지 시간 제한)
 
   frontend:
     image: star1431/guest-book-app-frontend:latest        # 빌드x 이미지로 교체
