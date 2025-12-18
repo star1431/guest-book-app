@@ -33,9 +33,9 @@ cors:
 ```
 
 ```java
-// 컨트롤러 내
+// GuestController.java 내
 @CrossOrigin(origins = "${cors.allowed-origins:http://localhost:3000}") // 기본은 로컬, 배포 시 환경변수로 변경
-public class GuestBookController { /** ... */ }
+public class GuestController { /** ... */ }
 ```
 
 - frontend 경우 도커컴포즈에 환경변수로 주입할려고 했으나, 빌드시점에서 반영이 안되어서 실패
@@ -148,7 +148,7 @@ export const getGuestBooks = async () => {
     - 도커컴포즈 = `CORS_ALLOWED_ORIGINS` 환경변수 추가
     - .env =  해당 환경변수값 추가
     - application.yml = `cors.allowed-origins` 값 디폴트 로컬호스트 추가
-    - GuestBookController.java = `@CrossOrigin` 어노테이션 수정
+    - GuestController.java = `@CrossOrigin` 어노테이션 수정
 
   - **frontend**
     - next.config.mjs = `async rewrites()` 설정 (source, destination)
@@ -175,10 +175,9 @@ export const getGuestBooks = async () => {
 
 ### 참고사항
 
-**Q.** `.gitignore`에 `application.yml` 반영 비활성 했는데 어떻게 배포가 되나?
+**Q.** `.gitignore`에 `application.yml` 보호상태인데 CI/CD 가능한 이유
 
-- 깃허브액션에서는 해당 파일이 이그노어면 모르긴함
-- 단 배포시에 EC2 서버에 있는  `docker-compose.yml` 기준으로 `.env` 환경 변수를 찾음
-- SPRING_DATASOURCE_URL, SPRING_DATASOURCE_USERNAME 등 해당 환경 변수값을 얻어서 대체함
-
-- 즉, `application.yml` 없어도 배포에 문제없음
+- 깃허브 액션 시 해당 파일이 `.gitignore`에 등록된 상태면 알 수 없지만
+- 배포 시에 EC2 서버에 있는 `docker-compose.yml` 기준으로 `.env` 환경 변수를 찾음
+- SPRING_DATASOURCE_URL, SPRING_DATASOURCE_USERNAME 등 해당 환경 변수값을 얻어서 대체
+- 즉, 배포 시 `application.yml` 없어도 가능
