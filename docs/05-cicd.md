@@ -58,6 +58,12 @@ jobs:
 
 - `main` 브랜치에 backend, frontend, deploy.yml 파일이 푸시될 때마다 워크플로우 실행
 
+- **secrets 인자 설명**
+    - DOCKER_USERNAME : 도커 허브 아이디
+    - DOCKER_PASSWORD : 퍼스널 액세스 토큰으로 대체
+    - EC2_HOST : EC2 퍼블릭 IPv4 주소
+    - EC2_KEY : pem 키 내용
+
 
 ## 3. 자동화된 단계별 흐름
 
@@ -72,3 +78,7 @@ jobs:
     - docker-compose 명령어로 최신 이미지 풀 및 컨테이너 재시작
 
 ## 4. (있다면) 실패했을 때 원인과 해결 과정
+
+![alt text](image-1.png)
+
+- EC2 배포 및 컴포즈 상태까지 확인 완료
