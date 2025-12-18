@@ -172,9 +172,19 @@ GitHub Actions 워크플로우 실행
 | **CORS 설정** | `http://localhost:3000` | 환경변수 `CORS_URL`로 동적 설정 |
 
 
-**Q.** `.gitignore`에 `application.yml` 보호상태인데 CI/CD 가능한 이유
+**Q.** `.gitignore`에 `application.yml` 제외 상태인데도 CI/CD 자동화 후 db연결 가능한 이유
 
-- 깃허브 액션 시 해당 파일이 `.gitignore`에 등록된 상태면 알 수 없지만
-- 배포 시에 EC2 서버에 있는 `docker-compose.yml` 기준으로 `.env` 환경 변수를 찾음
-- SPRING_DATASOURCE_URL, SPRING_DATASOURCE_USERNAME 등 해당 환경 변수값을 얻어서 대체
+- 깃허브 액션시 깃 허브는 해당 파일이 `.gitignore`에 제외상태로 들어가 있으면 알 수 없지만
+- 배포 시에 EC2 서버에 있는 `docker-compose.yml` 기준으로 backend 부분 `environment` 값을 참조함
+```yaml
+    #...
+    environment:
+        SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+        SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+        SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+        CORS_ALLOWED_ORIGINS: ${CORS_URL}
+    #...
+```
+
+- 해당 값 가지고 `application.yml`의 datasource 정보를 대체하여 사용
 - 즉, 배포 시 `application.yml` 없어도 가능
