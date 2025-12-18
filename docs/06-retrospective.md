@@ -2,12 +2,104 @@
 
 ## 1. 가장 막혔던 지점
 
+### 1.1 docker hub -> EC2 배포 및 테스트
+
+### 1차 난관: localhost 수정 문제
+
+**문제확인**
+
+- 로컬에서 도커 컴포즈로 실행 후 테스트할 때는 localhost로 잘 되었음
+- EC2에 배포할 때 퍼블릭 IP로 수정해야 되는데.. 매번 EC2 보내기전 코드 수정하는 번거로움 발생
+
+**해결방안**
+
+- backend 경우 도커컴포즈에 `CORS_ALLOWED_ORIGINS` 환경변수로 CORS 허용 도메인 설정
+
+```yaml
+# 도커컴포즈 내
+    environment:
+        CORS_ALLOWED_ORIGINS: ${CORS_URL}       # 프론트 주소 CORS
+```
+
+```bash
+# .env 파일 내
+CORS_URL=http://<퍼블릭IPv4주소>:3000
+```
+
+```yaml
+# application.yml 내
+cors:
+  allowed-origins: http://localhost:3000
+```
+
+```java
+// 컨트롤러 내
+@CrossOrigin(origins = "${cors.allowed-origins:http://localhost:3000}") // 기본은 로컬, 배포 시 환경변수로 변경
+public class GuestBookController { /** ... */ }
+```
+
+- frontend 경우 도커컴포즈에 환경변수로 주입할려고 했으나, 빌드시점에서 반영이 안되어서 실패
+- 그래서 nextjs의 `next.config.mjs` 파일에서 설정 및 `guestBookApi.js` 수정
+
+```javascript
+// next.config.mjs
+const isLocal = process.env.NODE_ENV === 'development'; // 로컬 환경인지 확인 (단독개발시)
+
+const nextConfig = {
+  output: 'standalone',
+  async rewrites() { // 리라이트 설정 (실제 요청 주소만 변경)
+    return [
+      {
+        // source : 프론트에서 쓰는 api 주소 형태 정의
+        source: '/api/:path*',
+        // destination : 실제 요청을 처리하는 백엔드 주소
+        destination: isLocal
+          ? 'http://localhost:8080/api/:path*'
+          : 'http://backend:8080/api/:path*', // 도커 컴포즈 내 서비스명
+      },
+    ];
+  },
+};
+```
+
+```javascript
+// guestBookApi.js
+// next.config.mjs 에서 설정한 주소 사용
+// const API_URL = 'http://localhost:8080/api/guestbooks';
+const API_URL = '/api/guestbooks';
+
+export const getGuestBooks = async () => {
+    const response = await fetch(API_URL, {});
+    if (!response.ok) {}
+    return response.json();
+};
+```
+
+### 2차 난관: 도커 메모리 문제
+
+- EC2 t3.micro 인스턴스는 메모리가 1GB로 부족하여 도커 컴포즈 실행시 메모리 부족으로 죽는 현상 발생
+- EC2에서 쓰이는 `docker-compose.yml` 파일에서 MySQL 메모리 제한 및 최적화 옵션 추가로 문제 해결
+
+* [ec2 폴더 참고](./../ec2/README.md)
+
+
 ## 2. 이해가 부족하다고 느낀 부분
+
+1. 백엔드, 프론트 기능 개발시 코드 작성 능력 좋지 않다고 느꼈음
+2. 흐름은 이해하지만 `Dockerfile`, `docker-compose.yml` 파일 작성에 대한 이해가 많이 부족
+3. 개발과 운영 사이 하드코딩 수정이 아닌 환경변수 주입 등으로 유연하게 대처하는 부분에 대한 스킬이 부족하다고 느낌
+4. CI/CD 자동화에서 `deploy.yml` 파일 작성에 대한 이해도 부족
 
 ## 3. 팀 프로젝트 전에 보완하고 싶은 기술
 
+- 코드 작성 능력 향상
+- 개발과 운영 환경에서 api 주소 등 하드코딩이 아닌 환경변수 주입 등으로 유연하게 대처하는 스킬 향상
+- Dockerfile, docker-compose.yml 작성 능력 향상
+
 ## 4. 혼자 진행하며 느낀 점
 
+- 처음부터 끝까지 혼자서 다 하려니 힘들었지만, 막히는 부분 있어도 해결하려고 노력하며 많이 배울 수 있었음
+- 프로젝트를 많이 해보라는 조언이 이해가 됨
 
 ---
 
@@ -37,17 +129,21 @@
 ---
 
 ## 2일차 체크리스트
+
 - [✅] Dockerfile 2개 작성 (Backend, Frontend)
 - [✅] docker-compose.yml 작성
 - [✅] 로컬에서 docker-compose up 실행 확인
 - [✅] AWS EC2에 수동 배포 성공
 - [✅] EC2 IP 주소로 서비스 접속 확인
 
+* [04-deploy.md 참고](./04-deploy.md)
+* [ec2 폴더 참고](./../ec2/README.md)
+
 ---
 
 
 ## 3일차 체크리스트
-- [ ] GitHub Actions 워크플로우 파일 작성
-- [ ] 코드 수정 후 Push → 자동 배포 확인
-- [ ] 모든 문서 작성 완료
-- [ ] 회고 문서 작성
+- [✅] GitHub Actions 워크플로우 파일 작성
+- [✅] 코드 수정 후 Push → 자동 배포 확인
+- [✅] 모든 문서 작성 완료
+- [✅] 회고 문서 작성
