@@ -70,7 +70,7 @@ server:
   port: 8080
 ```
 
-### MySQL 컨테이너 실행 (Docker) - local 기준
+### MySQL 컨테이너 실행 (Docker) - local 단독개발시
 
 ```bash
 docker run -d \
@@ -147,8 +147,13 @@ http://localhost:8080/api/guestbooks
 ### 4. 방명록 삭제
 
 - **Method**: `DELETE`
-- **URL**: `/api/guestbooks/{id}?password={password}`
-- **예시**: `/api/guestbooks/1?password=1234`
+- **URL**: `/api/guestbooks/{id}`
+- **Request Body**:
+  ```json
+    {
+    "password": "1234"
+    }
+  ```
 
 ## API 테스트 파일
 
@@ -168,8 +173,36 @@ IntelliJ에서 해당 파일 오픈 후 각 요청 옆 (▶) 실행
 - ✅ CORS 설정 (프론트엔드 연동 지원)
 - ✅ JPA를 통한 데이터베이스 연동
 
-## CORS 
+## CORS
 
-- 현재 CORS는 `http://localhost:3000` (프론트엔드)만 허용중
+- local 개발시 `http://localhost:3000` 프론트 주소 허용
+- EC2 배포시 `http://<퍼블릭IPv4주소>:3000` 허용
+
+```yaml
+# application.yml 내
+cors:
+  allowed-origins: http://localhost:3000
+```
+
+```java
+// 컨트롤러 내
+@CrossOrigin(origins = "${cors.allowed-origins:http://localhost:3000}")
+public class GuestBookController { /** ... */ }
+```
+
+```yaml
+# EC2 전용 ec2/docker-compose.yml 내
+    environment:
+        CORS_ALLOWED_ORIGINS: ${CORS_URL}       # 프론트 주소 CORS
+``
+
+```bash
+# EC2 전용 ec2/.env 내
+MYSQL_ROOT_PASSWORD=
+MYSQL_DATABASE=guestdb
+MYSQL_USER=
+MYSQL_PASSWORD=
+CORS_URL=http://<퍼블릭IPv4주소>:3000
+```
 
 

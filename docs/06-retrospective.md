@@ -136,8 +136,23 @@ export const getGuestBooks = async () => {
 - [✅] AWS EC2에 수동 배포 성공
 - [✅] EC2 IP 주소로 서비스 접속 확인
 
-* [04-deploy.md 참고](./04-deploy.md)
-* [ec2 폴더 참고](./../ec2/README.md)
+
+### 작업 history
+
+1. **ec2 배포시 `ec2/docker-compose.yml` 따로 구성**
+  - [04-deploy.md 참고](./04-deploy.md)
+  - [ec2 폴더 참고](./../ec2/README.md)
+
+2. **ec2 배포시 localhost 퍼블릭주소 교체 처리**
+  - **backend** 
+    - 도커컴포즈 = `CORS_ALLOWED_ORIGINS` 환경변수 추가
+    - .env =  해당 환경변수값 추가
+    - application.yml = `cors.allowed-origins` 값 디폴트 로컬호스트 추가
+    - GuestBookController.java = `@CrossOrigin` 어노테이션 수정
+
+  - **frontend**
+    - next.config.mjs = `async rewrites()` 설정 (source, destination)
+    - guestBookApi.js = fetch 주소 `/api/guestbooks` 로 변경
 
 ---
 
@@ -147,3 +162,23 @@ export const getGuestBooks = async () => {
 - [✅] 코드 수정 후 Push → 자동 배포 확인
 - [✅] 모든 문서 작성 완료
 - [✅] 회고 문서 작성
+
+### 작업 history
+
+1. **워크플로우 설정**
+  - on.push.paths 부분에 특정폴더 및 deploy.yml 변경시 액션
+
+2. **step 설정**
+  - 도커허브 액션 : 프론트,백엔드 빌드 후 푸쉬 실행
+  - EC2 배포 액션 : 컴포즈 풀, 업 실행 및 ps 확인
+
+
+### 참고사항
+
+**Q.** `.gitignore`에 `application.yml` 반영 비활성 했는데 어떻게 배포가 되나?
+
+- 깃허브액션에서는 해당 파일이 이그노어면 모르긴함
+- 단 배포시에 EC2 서버에 있는  `docker-compose.yml` 기준으로 `.env` 환경 변수를 찾음
+- SPRING_DATASOURCE_URL, SPRING_DATASOURCE_USERNAME 등 해당 환경 변수값을 얻어서 대체함
+
+- 즉, `application.yml` 없어도 배포에 문제없음

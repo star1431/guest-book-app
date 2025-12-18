@@ -67,4 +67,4 @@
 }
 ```
 
-**참고**: 삭제 API는 `GuestBookRequestDTO`의 `password` 필드만 사용합니다.
+**참고**: 삭제 API는 `GuestBookRequestDTO`의 `password` 필드만 사용

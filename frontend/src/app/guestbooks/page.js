@@ -17,7 +17,11 @@ const GuestbooksPage = () => {
             setLoading(true);
             setError(null);
             const data = await getGuestBooks();
-            setGuestbooks(data);
+            // 2025-12-18 : 내림차순 형태로 변경
+            const sorted = [...data].sort((a, b) => 
+                b.createdAt.localeCompare(a.createdAt)
+            );
+            setGuestbooks(sorted);
         } catch (err) {
             setError(err.message);
             console.error('방명록 조회 실패:', err);

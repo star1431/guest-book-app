@@ -2,6 +2,8 @@
 
 Spring Boot와 Next.js를 활용한 풀스택 방명록 CRUD
 
+![image-2.png](./docs/image-2.png)
+
 ---
 
 ## 프로젝트 개요
@@ -9,6 +11,39 @@ Spring Boot와 Next.js를 활용한 풀스택 방명록 CRUD
 - **백엔드**: Spring Boot 기반 RESTful API
 - **프론트엔드**: Next.js 기반 웹 인터페이스
 - **데이터베이스**: MySQL 8.0
+
+---
+
+## 관련 기술 스택
+
+### Backend
+- Java 21
+- Spring Boot 4.0.0
+- Spring Data JPA
+- MySQL 8.0
+- Gradle
+
+### Frontend
+- Next.js
+- React
+- Tailwind CSS
+
+### Infrastructure
+- Docker
+- Docker Compose
+
+---
+
+## docs 문서
+
+프로젝트 관련 상세 문서는 `docs/` 폴더를 참고
+
+- **프로젝트 설계**: [docs/01-project-design.md](./docs/01-project-design.md)
+- **API 명세서**: [docs/02-api-spec.md](./docs/02-api-spec.md)
+- **Docker 구성**: [docs/03-docker.md](./docs/03-docker.md)
+- **AWS 배포**: [docs/04-deploy.md](./docs/04-deploy.md)
+- **CI/CD 자동화**: [docs/05-cicd.md](./docs/05-cicd.md)
+- **회고 문서**: [docs/06-retrospective.md](./docs/06-retrospective.md)
 
 ---
 
@@ -43,27 +78,7 @@ guest-book-app/
 
 ---
 
-## 관련 기술 스택
-
-### Backend
-- Java 21
-- Spring Boot 4.0.0
-- Spring Data JPA
-- MySQL 8.0
-- Gradle
-
-### Frontend
-- Next.js
-- React
-- Tailwind CSS
-
-### Infrastructure
-- Docker
-- Docker Compose
-
----
-
-## 시작하기
+## Local 실행시
 
 ### 백엔드 실행
 
@@ -86,26 +101,28 @@ npm run dev
 
 ---
 
-## docs 문서
+## Docker 실행시
 
-프로젝트 관련 상세 문서는 `docs/` 폴더를 참고
+- `.env` 민감정보 작성 필요 (gitignore 상태)
 
-- **프로젝트 설계**: [docs/01-project-design.md](./docs/01-project-design.md)
-- **API 명세서**: [docs/02-api-spec.md](./docs/02-api-spec.md)
-- **Docker 구성**: [docs/03-docker.md](./docs/03-docker.md)
-- **AWS 배포**: [docs/04-deploy.md](./docs/04-deploy.md)
-- **CI/CD 자동화**: [docs/05-cicd.md](./docs/05-cicd.md)
-- **회고 문서**: [docs/06-retrospective.md](./docs/06-retrospective.md)
+```bash
+# .env
+MYSQL_ROOT_PASSWORD=
+MYSQL_DATABASE=
+MYSQL_USER=
+MYSQL_PASSWORD=
+CORS_URL=http://localhost:3000
+```
+
+- 실행
+
+```bash
+docker-compose up -d --build
+```
+
 
 ---
 
-## 프로젝트 일정
-
-- **1일차**: 애플리케이션 개발 & 로컬 통합
-- **2일차**: 컨테이너화 & AWS 배포
-- **3일차**: CI/CD 설정 & 문서 정리
-
----
 
 ## 보안 관련
 
