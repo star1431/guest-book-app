@@ -11,8 +11,8 @@ Next.js 기반의 방명록 웹 UI
 
 - **Next.js (App Router)**
 - **React**
-- **JavaScript (ES202x)**
-- **Tailwind CSS / 커스텀 CSS**
+- **JavaScript (ES6+)**
+- **Tailwind CSS**
 - **Docker**
 
 ## 프로젝트 구조

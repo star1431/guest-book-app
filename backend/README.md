@@ -194,7 +194,7 @@ public class GuestController { /** ... */ }
 # EC2 전용 ec2/docker-compose.yml 내
     environment:
         CORS_ALLOWED_ORIGINS: ${CORS_URL}       # 프론트 주소 CORS
-``
+```
 
 ```bash
 # EC2 전용 ec2/.env 내
