@@ -127,4 +127,6 @@ docker-compose up -d --build
 ## 보안 관련
 
 - `application.yml` 및 민감한 설정 파일은 `.gitignore`에 포함
-- 환경 변수 및 비밀번호는 각자의 로컬 환경에서 설정
+- 환경변수 관련 로컬용/EC2용 분리하여 관리
+    - 로컬 : 최상위 루트  내 `.env`
+    - EC2 : EC2 폴더 내 `.env`
